@@ -57,7 +57,8 @@ For Anthropic OAuth requests, Pi Black reproduces the version-specific SDK-CLI r
 - structure-aware `cch` calculation using seeded XXH64;
 - per-request `x-client-request-id` values;
 - Claude Code session headers;
-- automatically discovered identity metadata when available.
+- automatically discovered identity metadata when available;
+- every request sent in full: Pi 1.5's Anthropic message-thread continuation, which leaves out the system blocks, is turned off.
 
 The checksum implementation validates and updates only the first billing system block. User content, tool results, descriptions, and nested `model` or `max_tokens` fields cannot redirect the placeholder patch.
 

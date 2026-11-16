@@ -359,6 +359,10 @@ export function mergeClaudeCodeOptions<T extends StreamOptions>(
 	return {
 		...options,
 		headers: { ...options.headers, ...claudeCodeHeaders(options.sessionId) },
+		// Pi 1.5 continues Anthropic message threads by sending only the new messages, without
+		// `system` and `tools`. The billing block and its cch live in `system`, so every OAuth
+		// request is sent in full instead. Older Pi releases ignore this option.
+		disableContinuation: true,
 		fetch: createClaudeCodeFetch(transport),
 		onPayload: async (payload, model) => {
 			const prior = await originalOnPayload?.(payload, model);

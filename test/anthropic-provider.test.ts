@@ -110,4 +110,17 @@ describe("Anthropic provider wrapper", () => {
 			"x-claude-code-session-id": "11111111-2222-4333-8444-555555555555",
 		});
 	});
+
+	it("sends OAuth requests in full instead of continuing message threads", () => {
+		const fake = fakeProvider();
+		const wrapped = wrapAnthropicProvider(fake.provider, undefined);
+		const options = {
+			apiKey: "sk-ant-oat-test",
+			sessionId: "11111111-2222-4333-8444-555555555555",
+		};
+		wrapped.stream(model, context, options);
+		wrapped.streamSimple(model, context, options);
+		expect(fake.getStreamOptions()).toMatchObject({ disableContinuation: true });
+		expect(fake.getSimpleOptions()).toMatchObject({ disableContinuation: true });
+	});
 });
